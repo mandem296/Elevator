@@ -1,0 +1,1 @@
+# Elevator app using Java Programming Language. Currently it is an implementation of one elevator. The plan is to have 5 elevators work asynchronously while their logs are stored on the mySQL database
