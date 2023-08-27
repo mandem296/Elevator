@@ -10,22 +10,24 @@ import java.util.Scanner;
 
 
 class Elevator {
-    private int currentFloor;
-    private boolean isMoving;
+    public int currentFloor;
+    public boolean isMoving;
+    public String elevatorId;
 
-    public Elevator() {
+    public Elevator(String elevatorId) {
+        this.elevatorId = elevatorId;
         currentFloor = 1; // Start on the first floor
         isMoving = false;
     }
 
     public void move(int destinationFloor) {
         if (destinationFloor == currentFloor) {
-            System.out.println("Elevator is already on floor " + currentFloor);
+            System.out.println(elevatorId + " is already on floor " + currentFloor);
             return;
         }
 
         if (isMoving) {
-            System.out.println("Elevator is already in motion.");
+            System.out.println(elevatorId + " is already in motion.");
             return;
         }
 
@@ -39,7 +41,7 @@ class Elevator {
                 currentFloor--;
             }
 
-            System.out.println("Elevator is on floor " + currentFloor);
+            System.out.println(elevatorId + " is on floor " + currentFloor);
 
             try {
                 Thread.sleep(1000); // Simulate time for moving between floors
@@ -49,6 +51,6 @@ class Elevator {
         }
 
         isMoving = false;
-        System.out.println("Elevator has reached floor " + currentFloor);
+        System.out.println(elevatorId + " has reached floor " + currentFloor);
     }
 }
