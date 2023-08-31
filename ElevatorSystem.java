@@ -126,6 +126,6 @@ public class ElevatorSystem {
             }
         }
 
-        // Existing code for shutting down the thread pool...
+        executorService.shutdown();
     }
 }
