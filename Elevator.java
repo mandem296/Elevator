@@ -1,12 +1,5 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.Callable;
-import com.example.ElevatorSystem.ElevatorSystem;
-import java.util.Scanner;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 class Elevator {
@@ -14,10 +7,18 @@ class Elevator {
     public boolean isMoving;
     public String elevatorId;
 
+    
+        
+
+    public LinkedBlockingQueue<ElevatorRequest> requestQueue;
+
     public Elevator(String elevatorId) {
         this.elevatorId = elevatorId;
         currentFloor = 1; // Start on the first floor
         isMoving = false;
+
+        // Initialize the request queue
+        requestQueue = new LinkedBlockingQueue<>();
     }
 
     public void move(int destinationFloor) {
@@ -52,5 +53,26 @@ class Elevator {
 
         isMoving = false;
         System.out.println(elevatorId + " has reached floor " + currentFloor);
+    }
+
+
+    public void addRequest(ElevatorRequest request) {
+        requestQueue.offer(request);
+    }
+
+    public void processRequests() {
+        while (true) {
+            try {
+                ElevatorRequest request = requestQueue.poll(1, TimeUnit.SECONDS);
+
+                if (request != null) {
+                    move(request.getFloor());
+                    System.out.println(elevatorId + " picked up " + request.getUser() + " at floor " + request.getFloor());
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
     }
 }
