@@ -6,9 +6,12 @@ public class ElevatorSystem {
     public static void main(String[] args) {
         Elevator elevator1 = new Elevator("Elevator 1");
         Elevator elevator2 = new Elevator("Elevator 2");
+        Elevator elevator3 = new Elevator("Elevator 3");
+        Elevator elevator4 = new Elevator("Elevator 4");
+        Elevator elevator5 = new Elevator("Elevator 5");
 
         // Create a thread pool for elevator tasks
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
 
         Scanner scanner = new Scanner(System.in);
 
@@ -21,18 +24,45 @@ public class ElevatorSystem {
             }
 
             // Determine which elevator is closer
-            int distanceToElevator1 = Math.abs(destinationFloor - elevator1.currentFloor);
-            int distanceToElevator2 = Math.abs(destinationFloor - elevator2.currentFloor);
+            int[] distances = {
+                Math.abs(destinationFloor - elevator1.currentFloor),
+                Math.abs(destinationFloor - elevator2.currentFloor),
+                Math.abs(destinationFloor - elevator3.currentFloor),
+                Math.abs(destinationFloor - elevator4.currentFloor),
+                Math.abs(destinationFloor - elevator5.currentFloor)
+            };
 
-            if (distanceToElevator1 <= distanceToElevator2) {
-                executorService.submit(() -> {
-                    elevator1.move(destinationFloor);
-                });
-            } else {
-                executorService.submit(() -> {
-                    elevator2.move(destinationFloor);
-                });
+            int closestElevatorIndex = 0;
+            int closestDistance = distances[0];
+
+            for (int i = 1; i < distances.length; i++) {
+                if (distances[i] < closestDistance) {
+                    closestElevatorIndex = i;
+                    closestDistance = distances[i];
+                }
             }
+
+            final int selectedElevatorIndex = closestElevatorIndex;
+
+            executorService.submit(() -> {
+                switch (selectedElevatorIndex) {
+                    case 0:
+                        elevator1.move(destinationFloor);
+                        break;
+                    case 1:
+                        elevator2.move(destinationFloor);
+                        break;
+                    case 2:
+                        elevator3.move(destinationFloor);
+                        break;
+                    case 3:
+                        elevator4.move(destinationFloor);
+                        break;
+                    case 4:
+                        elevator5.move(destinationFloor);
+                        break;
+                }
+            });
         }
 
         // Shutdown the thread pool when done
